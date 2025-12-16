@@ -29,3 +29,22 @@ self.addEventListener('install', (event) => {
             .catch(err => console.log('Service Worker: Cache failed', err))
     );
 });
+
+self.addEventListener('activate', (event) => {
+    console.log('Service Worker: Activating...');
+
+    event.waitUntil(
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames.map(cache => {
+                    if (cache !== CACHE_NAME) {
+                        console.log('Service Worker: Clearing old cache');
+                        return caches.delete(cache);
+                    }
+                })
+            );
+        })
+    );
+
+    return self.clients.claim();
+});
