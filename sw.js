@@ -48,3 +48,50 @@ self.addEventListener('activate', (event) => {
 
     return self.clients.claim();
 });
+
+self.addEventListener('fetch', (event) => {
+    if (!event.request.url.startsWith(self.location.origin)) {
+        return;
+    }
+
+    event.respondWith(
+        caches.match(event.request)
+            .then(cachedResponse => {
+                if (cachedResponse) {
+                    fetch(event.request)
+                        .then(response => {
+                            if (response && response.status === 200) {
+                                caches.open(CACHE_NAME)
+                                    .then(cache => cache.put(event.request, response));
+                            }
+                        })
+                        .catch(() => {
+                        });
+
+                    return cachedResponse;
+                }
+
+                return fetch(event.request)
+                    .then(response => {
+                        if (!response || response.status !== 200 || response.type === 'error') {
+                            return response;
+                        }
+
+                        const responseToCache = response.clone();
+
+                        caches.open(CACHE_NAME)
+                            .then(cache => {
+                                cache.put(event.request, responseToCache);
+                            });
+
+                        return response;
+                    })
+                    .catch(() => {
+                        if (event.request.headers.get('accept') &&
+                            event.request.headers.get('accept').includes('text/html')) {
+                            return caches.match('./index.html');
+                        }
+                    });
+            })
+    );
+});
