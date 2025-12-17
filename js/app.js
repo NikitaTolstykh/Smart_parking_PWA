@@ -10,3 +10,18 @@ if ('serviceWorker' in navigator) {
             });
     });
 }
+
+function updateOnlineStatus() {
+    const statusElement = document.getElementById('status');
+    const statusText = document.getElementById('status-text');
+
+    if (!statusElement) return;
+
+    if (navigator.onLine) {
+        statusElement.innerHTML = '<span class="status-icon">📶</span><span id="status-text">Online</span>';
+        statusElement.style.color = '#4CAF50';
+    } else {
+        statusElement.innerHTML = '<span class="status-icon">📵</span><span id="status-text">Offline</span>';
+        statusElement.style.color = '#f44336';
+    }
+}
