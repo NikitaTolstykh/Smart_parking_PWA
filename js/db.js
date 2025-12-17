@@ -59,3 +59,31 @@ async function saveReport(reportData) {
         throw error;
     }
 }
+
+async function getAllReports() {
+    try {
+        const db = await openDB();
+
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction([STORE_NAME], 'readonly');
+            const objectStore = transaction.objectStore(STORE_NAME);
+
+            const request = objectStore.getAll();
+
+            request.onsuccess = () => {
+                resolve(request.result);
+            };
+
+            request.onerror = () => {
+                reject('Error getting reports');
+            };
+
+            transaction.oncomplete = () => {
+                db.close();
+            };
+        });
+    } catch (error) {
+        console.error('Error in getAllReports:', error);
+        return [];
+    }
+}
