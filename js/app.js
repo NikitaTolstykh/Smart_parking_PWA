@@ -28,3 +28,7 @@ function updateOnlineStatus() {
 
 window.addEventListener('online', updateOnlineStatus);
 window.addEventListener('offline', updateOnlineStatus);
+
+document.addEventListener('DOMContentLoaded', () => {
+    updateOnlineStatus();
+});
