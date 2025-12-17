@@ -25,3 +25,6 @@ function updateOnlineStatus() {
         statusElement.style.color = '#f44336';
     }
 }
+
+window.addEventListener('online', updateOnlineStatus);
+window.addEventListener('offline', updateOnlineStatus);
