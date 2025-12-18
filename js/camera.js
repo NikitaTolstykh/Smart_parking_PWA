@@ -42,3 +42,34 @@ startCameraBtn.addEventListener('click', async () => {
         showNotification('Nie można uzyskać dostępu do kamery ❌', 'error');
     }
 });
+
+// Take photo
+takePhotoBtn.addEventListener('click', () => {
+    // Set canvas dimensions to match video
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    // Draw video frame to canvas
+    const context = canvas.getContext('2d');
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    // Convert canvas to data URL
+    capturedPhotoData = canvas.toDataURL('image/jpeg', 0.8);
+
+    // Display photo
+    photo.src = capturedPhotoData;
+    photo.style.display = 'block';
+    video.style.display = 'none';
+
+    // Stop video stream
+    if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+    }
+
+    // Update UI
+    takePhotoBtn.style.display = 'none';
+    retakePhotoBtn.style.display = 'inline-flex';
+    photoPreview.style.display = 'block';
+
+    showNotification('Zdjęcie zrobione! 📷', 'success');
+});
