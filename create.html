@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#4CAF50">
+    <title>Utwórz raport - Parking Reports</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="../WebstormProjects/parking_system_PWA/css/styles.css"></head>
+<body>
+<div class="container">
+    <header>
+        <nav class="nav">
+            <a href="index.html" class="nav-link">🏠 Home</a>
+            <a href="create.html" class="nav-link active">📸 Utwórz</a>
+            <a href="reports.html" class="nav-link">📄 Raporty</a>
+        </nav>
+    </header>
+
+    <main class="create-screen">
+        <h2>Utwórz nowy raport</h2>
+
+        <div class="camera-container">
+            <video id="video" autoplay playsinline></video>
+            <canvas id="canvas" style="display: none;"></canvas>
+            <img id="photo" style="display: none;" alt="Captured photo">
+        </div>
+
+        <div class="camera-controls">
+            <button id="startCamera" class="btn btn-primary">
+                📷 Uruchom kamerę
+            </button>
+
+            <button id="takePhoto" class="btn btn-success" style="display: none;">
+                📸 Zrób zdjęcie
+            </button>
+
+            <button id="retakePhoto" class="btn btn-warning" style="display: none;">
+                🔄 Ponów zdjęcie
+            </button>
+        </div>
+
+        <div id="photoPreview" style="display: none;">
+            <h3>Podgląd zdjęcia</h3>
+            <div class="form-group">
+                <label for="description">Opis (opcjonalnie):</label>
+                <textarea id="description" rows="3" placeholder="Dodaj opis problemu..."></textarea>
+            </div>
+
+            <button id="saveReport" class="btn btn-primary btn-large">
+                💾 Zapisz raport
+            </button>
+        </div>
+
+        <div id="notification" class="notification"></div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Parking Reports PWA</p>
+    </footer>
+</div>
+
+<script src="../WebstormProjects/parking_system_PWA/js/app.js"></script>
+<script src="../WebstormProjects/parking_system_PWA/js/db.js"></script>
+<script src="../WebstormProjects/parking_system_PWA/js/camera.js"></script>
+<script src="../WebstormProjects/parking_system_PWA/js/notifications.js"></script>
+</body>
+</html>
