@@ -152,4 +152,10 @@ takePhotoBtn.addEventListener('click', () => {
             notification.classList.remove('show');
         }, 3000);
     }
+
+    window.addEventListener('beforeunload', () => {
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+        }
+    });
 });
