@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#4CAF50">
+    <title>Parking Reports</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="../WebstormProjects/parking_system_PWA/css/styles.css">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>🚗 Parking Reports</h1>
+        <div class="status" id="status">
+            <span class="status-icon">📶</span>
+            <span id="status-text">Online</span>
+        </div>
+    </header>
+
+    <main class="home-screen">
+        <div class="welcome">
+            <h2>Witaj w aplikacji parkingowej</h2>
+            <p>Dokumentuj problemy z parkowaniem i zarządzaj swoimi raportami</p>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn btn-primary" onclick="location.href='create.html'">
+                <span class="btn-icon">📸</span>
+                Utwórz raport
+            </button>
+
+            <button class="btn btn-secondary" onclick="location.href='reports.html'">
+                <span class="btn-icon">📄</span>
+                Moje raporty
+            </button>
+        </div>
+
+        <div class="info-cards">
+            <div class="info-card">
+                <h3>📱 Działa offline</h3>
+                <p>Aplikacja działa bez internetu</p>
+            </div>
+            <div class="info-card">
+                <h3>📸 Zrób zdjęcie</h3>
+                <p>Dokumentuj problemy z parkowaniem</p>
+            </div>
+            <div class="info-card">
+                <h3>💾 Zapisz lokalnie</h3>
+                <p>Wszystkie dane są bezpieczne</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Parking Reports PWA</p>
+    </footer>
+</div>
+
+<script src="../WebstormProjects/parking_system_PWA/js/app.js"></script>
+</body>
+</html>
