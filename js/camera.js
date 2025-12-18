@@ -141,5 +141,15 @@ takePhotoBtn.addEventListener('click', () => {
             showNotification('Błąd podczas zapisywania raportu ❌', 'error');
         }
     });
+// Show notification
+    function showNotification(message, type = 'success') {
+        const notification = document.getElementById('notification');
+        notification.textContent = message;
+        notification.className = 'notification show';
+        notification.style.backgroundColor = type === 'error' ? '#f44336' : '#4CAF50';
 
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, 3000);
+    }
 });
