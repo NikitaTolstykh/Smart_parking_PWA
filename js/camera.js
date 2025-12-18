@@ -72,4 +72,32 @@ takePhotoBtn.addEventListener('click', () => {
     photoPreview.style.display = 'block';
 
     showNotification('Zdjęcie zrobione! 📷', 'success');
+
+    // Retake photo
+    retakePhotoBtn.addEventListener('click', async () => {
+        capturedPhotoData = null;
+        photo.style.display = 'none';
+        photoPreview.style.display = 'none';
+        descriptionInput.value = '';
+
+        // Restart camera
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: 'environment',
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                }
+            });
+
+            video.srcObject = stream;
+            video.style.display = 'block';
+
+            retakePhotoBtn.style.display = 'none';
+            takePhotoBtn.style.display = 'inline-flex';
+        } catch (error) {
+            console.error('Error restarting camera:', error);
+            showNotification('Nie można ponownie uruchomić kamery ❌', 'error');
+        }
+    });
 });
