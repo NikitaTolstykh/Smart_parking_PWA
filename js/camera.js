@@ -100,4 +100,46 @@ takePhotoBtn.addEventListener('click', () => {
             showNotification('Nie można ponownie uruchomić kamery ❌', 'error');
         }
     });
+
+    // Save report
+    saveReportBtn.addEventListener('click', async () => {
+        if (!capturedPhotoData) {
+            showNotification('Najpierw zrób zdjęcie! ⚠️', 'error');
+            return;
+        }
+
+        const reportData = {
+            photo: capturedPhotoData,
+            description: descriptionInput.value.trim(),
+            timestamp: new Date().toISOString()
+        };
+
+        try {
+            await saveReport(reportData);
+
+            // Show notification
+            showNotification('Raport zapisany! ✅', 'success');
+
+            // Send browser notification
+            sendBrowserNotification('Raport zapisany', 'Twój raport parkingowy został pomyślnie zapisany.');
+
+            // Reset form after short delay
+            setTimeout(() => {
+                capturedPhotoData = null;
+                photo.style.display = 'none';
+                photoPreview.style.display = 'none';
+                descriptionInput.value = '';
+                retakePhotoBtn.style.display = 'none';
+                startCameraBtn.style.display = 'inline-flex';
+
+                // Optionally redirect to reports page
+                // window.location.href = 'reports.html';
+            }, 2000);
+
+        } catch (error) {
+            console.error('Error saving report:', error);
+            showNotification('Błąd podczas zapisywania raportu ❌', 'error');
+        }
+    });
+
 });
