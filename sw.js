@@ -106,3 +106,18 @@ async function syncReports() {
     // Placeholder for syncing reports to server when online
     console.log('Syncing reports to server...');
 }
+
+self.addEventListener('push', (event) => {
+    const data = event.data ? event.data.json() : {};
+    const title = data.title || 'Parking Reports';
+    const options = {
+        body: data.body || 'Nowe powiadomienie',
+        icon: '/icons/icon-192.png',
+        badge: '/icons/icon-192.png',
+        vibrate: [200, 100, 200]
+    };
+
+    event.waitUntil(
+        self.registration.showNotification(title, options)
+    );
+});
