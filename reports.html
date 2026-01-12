@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#667eea">
+    <title>Moje raporty - Parking Reports</title>
+    <link rel="manifest" href="../WebstormProjects/parking_system_PWA/manifest.json">
+    <link rel="stylesheet" href="../WebstormProjects/parking_system_PWA/css/styles.css">
+</head>
+<body>
+<div class="container">
+    <header>
+        <nav class="nav">
+            <a href="../WebstormProjects/parking_system_PWA/index.html" class="nav-link">🏠 Home</a>
+            <a href="../WebstormProjects/parking_system_PWA/create.html" class="nav-link">📸 Utwórz</a>
+            <a href="reports.html" class="nav-link active">📄 Raporty</a>
+        </nav>
+    </header>
+
+    <main class="reports-screen">
+        <div class="reports-header">
+            <h2>📋 Moje raporty</h2>
+            <button id="clearAll" class="btn btn-danger btn-small">
+                🗑️ Usuń wszystkie
+            </button>
+        </div>
+
+        <div id="reportsContainer" class="reports-container">
+            <p class="loading">Ładowanie raportów...</p>
+        </div>
+
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <div class="empty-icon">📭</div>
+            <h3>Brak raportów</h3>
+            <p>Nie masz jeszcze żadnych zapisanych raportów</p>
+            <a href="../WebstormProjects/parking_system_PWA/create.html" class="btn btn-primary">
+                📸 Utwórz pierwszy raport
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Parking Reports PWA | Made with ❤️</p>
+    </footer>
+</div>
+
+<div id="photoModal" class="modal">
+    <div class="modal-content">
+        <button class="modal-close" onclick="closePhotoModal()">✕</button>
+        <img id="modalImage" src="" alt="Full size photo">
+    </div>
+</div>
+
+<script src="../WebstormProjects/parking_system_PWA/js/db.js"></script>
+<script src="../WebstormProjects/parking_system_PWA/js/app.js"></script>
+<script>
+
+    function openPhotoModal(imageSrc) {
+        const modal = document.getElementById('photoModal');
+        const modalImg = document.getElementById('modalImage');
+        modalImg.src = imageSrc;
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closePhotoModal() {
+        const modal = document.getElementById('photoModal');
+        modal.classList.remove('show');
+        document.body.style.overflow = 'auto';
+    }
+
+    document.getElementById('photoModal').addEventListener('click', function (e) {
+        if (e.target === this) {
+            closePhotoModal();
+        }
+    });
+
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            closePhotoModal();
+        }
+    });
+
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        const container = document.getElementById('reportsContainer');
+        const emptyState = document.getElementById('emptyState');
+        const clearAllBtn = document.getElementById('clearAll');
+
+        async function loadReports() {
+            try {
+                const reports = await getAllReports();
+
+                if (reports.length === 0) {
+                    container.style.display = 'none';
+                    emptyState.style.display = 'block';
+                    clearAllBtn.style.display = 'none';
+                    return;
+                }
+
+                container.innerHTML = '';
+                container.style.display = 'grid';
+                emptyState.style.display = 'none';
+
+                reports.reverse().forEach(report => {
+                    const reportCard = document.createElement('div');
+                    reportCard.className = 'report-card';
+
+                    const date = new Date(report.timestamp);
+                    const formattedDate = date.toLocaleDateString('pl-PL', {
+                        day: '2-digit',
+                        month: 'long',
+                        year: 'numeric'
+                    });
+                    const formattedTime = date.toLocaleTimeString('pl-PL', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+
+                    reportCard.innerHTML = `
+                        <img src="${report.photo}" alt="Report photo" onclick="openPhotoModal('${report.photo}')">
+                        <div class="report-info">
+                            <div class="report-date">
+                                📅 ${formattedDate} | 🕐 ${formattedTime}
+                            </div>
+                            ${report.description ? `<p class="report-description">${report.description}</p>` : '<p class="report-description" style="color: var(--text-muted); font-style: italic;">Brak opisu</p>'}
+                            <button class="btn btn-danger btn-small delete-btn" data-id="${report.id}">
+                                🗑️ Usuń
+                            </button>
+                        </div>
+                    `;
+
+                    container.appendChild(reportCard);
+                });
+
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        e.stopPropagation();
+                        const id = parseInt(e.target.dataset.id);
+                        if (confirm('Czy na pewno chcesz usunąć ten raport?')) {
+                            await deleteReport(id);
+                            loadReports();
+                        }
+                    });
+                });
+
+            } catch (error) {
+                console.error('Error loading reports:', error);
+                container.innerHTML = '<p class="error">❌ Błąd ładowania raportów</p>';
+            }
+        }
+
+        clearAllBtn.addEventListener('click', async () => {
+            if (confirm('⚠️ Czy na pewno chcesz usunąć wszystkie raporty? Tej operacji nie można cofnąć!')) {
+                const reports = await getAllReports();
+                for (const report of reports) {
+                    await deleteReport(report.id);
+                }
+                loadReports();
+            }
+        });
+
+        loadReports();
+    });
+</script>
+</body>
+</html>
