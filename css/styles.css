@@ -613,9 +613,6 @@ main {
     font-size: 1.125rem;
 }
 
-/* ============================================
-   MODAL - Photo Viewer
-   ============================================ */
 .modal {
     display: none;
     position: fixed;
@@ -706,5 +703,107 @@ main {
     to {
         opacity: 1;
         transform: translateX(0);
+    }
+}
+footer {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: var(--border);
+    text-align: center;
+    padding: var(--spacing-lg);
+    margin-top: var(--spacing-xl);
+    margin-bottom: var(--spacing-md);
+    color: var(--text-muted);
+    border-radius: var(--radius-xl);
+}
+
+
+.loading, .error {
+    text-align: center;
+    padding: var(--spacing-xl);
+    font-size: 1.125rem;
+}
+
+.loading {
+    color: var(--text-secondary);
+}
+
+.error {
+    color: var(--danger);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@media (max-width: 576px) {
+    :root {
+        --spacing-xl: 2rem;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+        min-width: auto;
+    }
+
+    .nav-link {
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
+    }
+
+    .reports-container {
+        grid-template-columns: 1fr;
+    }
+
+    .camera-controls {
+        flex-direction: column;
+    }
+
+    .modal-close {
+        top: var(--spacing-sm);
+        right: var(--spacing-sm);
+    }
+}
+
+@media (min-width: 768px) {
+    .info-cards {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+}
+
+@media (min-width: 992px) {
+    .container {
+        padding: 0 var(--spacing-lg);
     }
 }
